@@ -28,33 +28,73 @@ export class UserService {
   }
 
   async createUser(nUser: CreateUserInput) {
-    user.push(nUser);
-    return [nUser];
+    if (this.checkData(nUser)) {
+      //validate
+      user.push(nUser);
+      return [nUser];
+    }
+    return [
+      {
+        id: 'data fail',
+        username: 'data fail',
+        password: 'data fail',
+        email: 'data fail',
+        name: 'data fail',
+      },
+    ];
+
+    // console.log(this.checkData(nUser))
   }
 
   async deleteUser(id: string) {
-    user.splice(Number.parseInt(id) -1, 1);
+    user.splice(Number.parseInt(id) - 1, 1);
     return user;
   }
 
   async updateUser(uUser: CreateUserInput) {
-    const currentUser = user.find(e => e.id === uUser.id);
-    if(currentUser) //validate data, if have user, update
-    {
+    const currentUser = user.find((e) => e.id === uUser.id);
+    if (currentUser) {
+      if (this.checkData(currentUser)) {
+        //validate data, if have user, update
         currentUser.username = uUser.username;
         currentUser.password = uUser.password;
         currentUser.email = uUser.email;
         currentUser.name = uUser.name;
         return user;
-    }else{
-        return [{
-            "id": "not in dtb",
-            "username": "not in dtb",
-            "password": "not in dtb",
-            "email": "not in dtb",
-            "name": "not in dtb"
-        }];
+      }else{
+        return [
+            {
+              id: 'data fail',
+              username: 'data fail',
+              password: 'data fail',
+              email: 'data fail',
+              name: 'data fail',
+            },
+          ];
+      }
+    } else {
+      return [
+        {
+          id: 'not in dtb',
+          username: 'not in dtb',
+          password: 'not in dtb',
+          email: 'not in dtb',
+          name: 'not in dtb',
+        },
+      ];
     }
     // console.log(currentUser)
+  }
+
+  //func validate data input
+  checkData(user: User) {
+    //username
+    let flag = true;
+    if (user.username.length < 6 || user.username.length > 20) flag = false;
+    else if (user.password.length < 6 || user.password.length > 20)
+      flag = false;
+    else if (user.name.length < 6 || user.name.length > 20) flag = false;
+
+    return flag;
   }
 }
