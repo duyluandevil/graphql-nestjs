@@ -1,4 +1,9 @@
-import { Resolver } from '@nestjs/graphql';
+import { Query, Resolver } from '@nestjs/graphql';
 
 @Resolver()
-export class UserResolver {}
+export class UserResolver {
+  @Query(() => String)
+  async Hello() {
+    return 'Hello world';
+  }
+}
