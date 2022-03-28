@@ -22,7 +22,13 @@ type Article {
 type Query {
   user(args: Float!): [User!]!
   deleteUser(args: String!): [User!]!
+  loginUser(input: LoginInput!): Boolean!
   article(args: Float!): [Article!]!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
 }
 
 type Mutation {

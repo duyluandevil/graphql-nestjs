@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import user from 'src/data/user';
-import { CreateUserInput, User } from './user.schema';
+import { CreateUserInput, LoginInput, User } from './user.schema';
 
 @Injectable()
 export class UserService {
@@ -97,4 +97,23 @@ export class UserService {
 
     return flag;
   }
+
+  //Login
+  async login({ email, password }: LoginInput) {
+    // Find our user
+    const user = await this.user
+      .find(e=>e.email == email);
+
+    // Check that user exists
+    // Validate user
+    if(!user)
+      throw new Error('Wrong email address')
+    else if(password !== user.password)
+      throw new Error('Wrong password')
+    // return the user
+    return true;
+
+    // console.log(password === user.password)
+  }
+
 }

@@ -41,3 +41,12 @@ export class CreateUserInput {
   name: string;
 }
 
+@InputType()
+export class LoginInput {
+  @Field()
+  email: string;
+
+  @Field()
+  password: string;
+}
+
