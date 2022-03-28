@@ -17,13 +17,14 @@ type Article {
   thumbnail: String!
   status: String!
   userid: User!
+  user: User!
 }
 
 type Query {
-  user(args: Float!): [User!]!
+  user(args: String!): [User!]!
   deleteUser(args: String!): [User!]!
   loginUser(input: LoginInput!): Boolean!
-  article(args: Float!): [Article!]!
+  article(args: String!): [Article!]!
 }
 
 input LoginInput {

@@ -10,7 +10,7 @@ export class UserResolver {
 
   //CRUD
   @Query(() => [User])
-  async user(@Args('args') args: number) {
+  async user(@Args('args') args: string) {
     if (args) {
       return this.userService.findOneById(args);
     }

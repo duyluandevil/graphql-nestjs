@@ -12,7 +12,7 @@ export class ArticleResolver {
   ) {}
 
   @Query(() => [Article])
-  async article(@Args('args') args: number) {
+  async article(@Args('args') args: string) {
     if (args) {
       return this.articleService.findOneById(args);
     }
@@ -20,13 +20,11 @@ export class ArticleResolver {
     // return this.userService.findWithCount(count);
   }
 
-  // @ResolveField(() => User)
-  // async user(@Parent() article: Article) {
-    
-  //   // console.log(this.userService.findOneById(id))
-  //   // console.log(typeof article.userid)
-  //   // // console.log(user.articleId)
-  //}
-
-
+  @ResolveField(() => User)
+  async user(@Parent() article: Article) {
+    return this.userService.findOneById(article.userid.toString());
+    // console.log(this.userService.findOneById(article.userid.toString()))
+    // console.log(typeof article.userid)
+    // // console.log(user.articleId)
+  }
 }

@@ -14,8 +14,8 @@ export class UserService {
     return user;
   }
 
-  async findOneById(id: number) {
-    return [user.find((e) => e.id == id)];
+  async findOneById(id: string) {
+    return [user.find((e) => e.id.toString() === id)];
     // console.log(user.find(e => e.id.toString() == id))
   }
 
@@ -33,15 +33,7 @@ export class UserService {
       user.push(nUser);
       return [nUser];
     }
-    return [
-      {
-        id: 'data fail',
-        username: 'data fail',
-        password: 'data fail',
-        email: 'data fail',
-        name: 'data fail',
-      },
-    ];
+    throw new Error("Wrong data input");
 
     // console.log(this.checkData(nUser))
   }
@@ -62,26 +54,10 @@ export class UserService {
         currentUser.name = uUser.name;
         return user;
       }else{
-        return [
-            {
-              id: 'data fail',
-              username: 'data fail',
-              password: 'data fail',
-              email: 'data fail',
-              name: 'data fail',
-            },
-          ];
+        throw new Error("Wrong data input");
       }
     } else {
-      return [
-        {
-          id: 'not in dtb',
-          username: 'not in dtb',
-          password: 'not in dtb',
-          email: 'not in dtb',
-          name: 'not in dtb',
-        },
-      ];
+      throw new Error("Cannot find user in database");
     }
     // console.log(currentUser)
   }

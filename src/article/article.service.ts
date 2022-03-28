@@ -14,8 +14,8 @@ export class ArticleService {
     return article;
   }
 
-  async findOneById(id: number) {
-    return [article.find((e) => e.id == id)];
+  async findOneById(id: string) {
+    return [article.find((e) => e.id.toString() == id)];
     // console.log(user.find(e => e.id.toString() == id))
   }
 }
