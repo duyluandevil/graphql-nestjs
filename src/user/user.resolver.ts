@@ -9,7 +9,7 @@ export class UserResolver {
   constructor(private userService: UserService) {} //constructor
 
   @Query(() => [User])
-  async user(@Args('args') args: string) {
+  async user(@Args('args') args: number) {
     if (args) {
       return this.userService.findOneById(args);
     }

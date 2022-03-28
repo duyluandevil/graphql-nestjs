@@ -12,7 +12,7 @@ export default [
     content: 'this is content',
     thumbnail: 'Harry Potter ',
     status: '',
-    userid: '1',
+    userid: 1,
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ export default [
     content: 'this is content',
     thumbnail: 'Harry Potter ',
     status: '',
-    userid: '1',
+    userid: 1,
   },
   {
     id: 3,
@@ -28,7 +28,7 @@ export default [
     content: 'this is content',
     thumbnail: 'Harry Potter ',
     status: '',
-    userid: '2',
+    userid: 2,
   },
   {
     id: 4,
@@ -36,7 +36,7 @@ export default [
     content: 'this is content',
     thumbnail: 'Hitchhiker',
     status: "",
-    userid: '2',
+    userid: 2,
   },
   {
     id: 5,
@@ -44,7 +44,7 @@ export default [
     content: 'this is content',
     thumbnail: 'Small Island',
     status: "",
-    userid: '3',
+    userid: 3,
   },
   {
     id: 6,
@@ -52,7 +52,7 @@ export default [
     content: 'this is content',
     thumbnail: 'The Mother Tongue',
     status: "",
-    userid: '4',
+    userid: 4,
   },
   {
     id: 7,
@@ -60,7 +60,7 @@ export default [
     content: 'this is content',
     thumbnail: 'Tolkien 4-Book Boxed',
     status: "",
-    userid: '5',
+    userid: 5,
   },
   {
     id: 8,
@@ -68,7 +68,7 @@ export default [
     content: 'this is content',
     thumbnail: 'The Lord of the Rings',
     status: "",
-    userid: '5',
+    userid: 5,
   },
   {
     id: 9,
@@ -76,7 +76,7 @@ export default [
     content: 'this is content',
     thumbnail: 'Hatchet',
     status: "",
-    userid: '6',
+    userid: 6,
   },
   {
     id: 10,
@@ -84,6 +84,6 @@ export default [
     content: 'this is content',
     thumbnail: 'Guts',
     status: "",
-    userid: '9',
+    userid: 9,
   },
 ];

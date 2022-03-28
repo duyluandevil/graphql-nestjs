@@ -10,9 +10,19 @@ type User {
   name: String!
 }
 
+type Article {
+  id: ID!
+  title: String!
+  content: String!
+  thumbnail: String!
+  status: String!
+  userid: User!
+}
+
 type Query {
-  user(args: String!): [User!]!
+  user(args: Float!): [User!]!
   deleteUser(args: String!): [User!]!
+  article(args: Float!): [Article!]!
 }
 
 type Mutation {

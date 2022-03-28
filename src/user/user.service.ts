@@ -14,8 +14,8 @@ export class UserService {
     return user;
   }
 
-  async findOneById(id: string) {
-    return [user.find((e) => e.id.toString() == id)];
+  async findOneById(id: number) {
+    return [user.find((e) => e.id == id)];
     // console.log(user.find(e => e.id.toString() == id))
   }
 

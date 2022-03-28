@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Field, ID, InputType, Int, ObjectType } from '@nestjs/graphql';
 import { GraphQLID, GraphQLList, GraphQLString } from 'graphql';
+import { Article } from 'src/article/article.schema';
 
 @ObjectType()
 export class User {
