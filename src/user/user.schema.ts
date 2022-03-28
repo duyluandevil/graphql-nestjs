@@ -1,20 +1,42 @@
 /* eslint-disable prettier/prettier */
-import { Field, ID, ObjectType } from "@nestjs/graphql";
+import { Field, ID, InputType, Int, ObjectType } from '@nestjs/graphql';
+import { GraphQLID, GraphQLList, GraphQLString } from 'graphql';
 
 @ObjectType()
-export class User{
-    @Field(() => ID) //store for schema.gql with field ID
-    id: number; //create field to get on graphql
-    
-    @Field()
-    username: string;
+export class User {
+  @Field(() => GraphQLID) //store for schema.gql with field ID
+  id: number; //create field to get on graphql
 
-    @Field()
-    password: string;
+  @Field(() => GraphQLString)
+  username: string;
 
-    @Field()
-    email: string;
+  @Field(() => GraphQLString)
+  password: string;
 
-    @Field()
-    name: string;
+  @Field(() => GraphQLString)
+  email: string;
+
+  @Field(() => GraphQLString)
+  name: string;
 }
+
+//Create User
+@InputType()
+export class CreateUserInput {
+  // get data input from client
+  @Field()
+  id: number;
+
+  @Field(() => GraphQLString)
+  username: string;
+
+  @Field(() => GraphQLString)
+  password: string;
+
+  @Field(() => GraphQLString)
+  email: string;
+
+  @Field(() => GraphQLString)
+  name: string;
+}
+
