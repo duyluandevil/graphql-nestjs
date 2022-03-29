@@ -12,6 +12,19 @@ export class ArticleResolver {
     private userService: UserService,
   ) {}
 
+  //Final api Query
+  /*
+    articles(
+      search: '',
+      limit: '',
+      category_id:'',
+      user_id: ''
+      page: 1
+    ) {
+
+    }
+    */
+
     @Query(() => [Article])
     async articles(@Args('limit') limit: string, @Args('categoryId') categoryId: string, @Args('userId') userId: string) {
       if( categoryId.length === 0 && userId.length === 0 ){
@@ -24,8 +37,36 @@ export class ArticleResolver {
         return this.articleService.filterCategory(categoryId);
       }
       else if( categoryId.length !== 0 && userId.length !== 0  ){ //return data filter 2 params
-        return this.articleService.filterCategoryAndUser(categoryId, userId);
+        return this.articleService.filterCategoryAndUser(categoryId, userId)
       }
     }
 
+  // @Query(() => [Article])
+  // async article(@Args('args') args: string) {
+  //   if (args) {
+  //     return this.articleService.findOneById(args);
+  //   }
+  //   return this.articleService.findAll();
+  //   // return this.userService.findWithCount(count);
+  // }
+
+  // //List article with filter userid
+  // @Query(() => [Article])
+  // async listArticleByUser(@Args('userId') userId: string) {
+  //   return this.articleService.filterUser(userId);
+  // }
+
+  // //List article with filter categoryId
+  // @Query(() => [Article])
+  // async listArticleByCategory(@Args('categoryId') categoryId: string) {
+  //   return this.articleService.filterCategory(categoryId);
+  // }
+
+  @ResolveField(() => [User])
+  async user(@Parent() article: Article) {
+    return await this.userService.findOneById(article.userid.toString());
+    // console.log(this.userService.findOneById(article.userid.toString()))
+    // console.log(typeof article.userid)
+    // // console.log(user.articleId)
+  }
 }

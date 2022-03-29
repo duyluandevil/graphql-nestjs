@@ -17,6 +17,7 @@ type Article {
   thumbnail: String!
   status: String!
   userid: User!
+  user: [User!]!
 }
 
 type Category {
