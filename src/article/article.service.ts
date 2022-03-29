@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import article from 'src/data/article';
@@ -12,9 +13,9 @@ export class ArticleService {
     this.article = article;
   }
 
-  async findAll() {
+  async findAll(limit: number) {
     //func to return all user in data
-    return article;
+    return article.slice(0, limit);
   }
 
   async findOneById(id: string) {
@@ -29,22 +30,49 @@ export class ArticleService {
   async filterCategory(categoryId: string) {
     // articleRCategory.filter(e => e.categoryId === categoryId.toString())
 
-    //get value from detail 
-    let arrayMtach = articleRCategory.filter(e => e.categoryId === categoryId.toString())
+    //get value from detail
+    let arrayMtach = articleRCategory.filter(
+      (e) => e.categoryId === categoryId.toString(),
+    );
 
     let arrayArticleId = []; // array has id of article
-    arrayMtach.forEach(e => arrayArticleId.push(e.articleId))
+    arrayMtach.forEach((e) => arrayArticleId.push(e.articleId));
 
     let arrayResultEnd = []; // create array for return articles
-    arrayArticleId.forEach(e=> 
-      arrayResultEnd.push(article.find(ele => ele.id.toString() === e))
-      )
-    
+    arrayArticleId.forEach((e) =>
+      arrayResultEnd.push(article.find((ele) => ele.id.toString() === e)),
+    );
+
     return arrayResultEnd;
-
-
-    
   }
 
+  //get data filter 2 prams is userid and categoryId
+  async filterCategoryAndUser(categoryId: string, userId: string) {
+    let arrayMtach = articleRCategory.filter(
+      (e) => e.categoryId === categoryId.toString(),
+    );
 
+    let arrayArticleId = []; // array has id of article
+    arrayMtach.forEach((e) => arrayArticleId.push(e.articleId));
+
+    let arrayResultWithCategory = []; // create array for return articles with category
+    arrayArticleId.forEach((e) =>
+      arrayResultWithCategory.push(
+        article.find((ele) => ele.id.toString() === e),
+      ),
+    );
+
+    let arrayResultEnd = []; // create array for return articles with category and userid
+    arrayResultWithCategory.forEach((e) => {
+        if(e.userid.toString() === userId)
+          arrayResultEnd.push(e)
+      }
+    );
+
+    // console.log(arrayResultEnd);
+
+    return arrayResultEnd;
+
+    // console.log(arrayMtach);
+  }
 }

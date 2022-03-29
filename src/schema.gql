@@ -17,7 +17,6 @@ type Article {
   thumbnail: String!
   status: String!
   userid: User!
-  user: [User!]!
 }
 
 type Category {
@@ -36,9 +35,7 @@ type Query {
   user(limit: String!, name: String!): [User!]!
   deleteUser(args: String!): [User!]!
   loginUser(input: LoginInput!): Boolean!
-  article(args: String!): [Article!]!
-  listArticleByUser(userId: String!): [Article!]!
-  listArticleByCategory(categoryId: String!): [Article!]!
+  articles(limit: String!, categoryId: String!, userId: String!): [Article!]!
   categories(limit: String!): [Category!]!
   category(limit: String!, name: String!): [Category!]!
   deleteCategory(id: String!): Boolean!
