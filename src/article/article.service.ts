@@ -32,7 +32,7 @@ export class ArticleService {
 
     //get value from detail
     let arrayMtach = articleRCategory.filter(
-      (e) => e.categoryId === categoryId.toString(),
+      (e) => e.categoryId.toString() === categoryId.toString(),
     );
 
     let arrayArticleId = []; // array has id of article
@@ -49,7 +49,7 @@ export class ArticleService {
   //get data filter 2 prams is userid and categoryId
   async filterCategoryAndUser(categoryId: string, userId: string) {
     let arrayMtach = articleRCategory.filter(
-      (e) => e.categoryId === categoryId.toString(),
+      (e) => e.categoryId.toString() === categoryId.toString(),
     );
 
     let arrayArticleId = []; // array has id of article

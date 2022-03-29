@@ -7,19 +7,19 @@
 
 export default [
   {
-    articleId: '1',
-    categoryId: '1',
+    articleId: 1,
+    categoryId: 1,
   },
   {
-    articleId: '1',
-    categoryId: '3',
+    articleId: 1,
+    categoryId: 3,
   },
   {
-    articleId: '2',
-    categoryId: '5',
+    articleId: 2,
+    categoryId: 5,
   },
   {
-    articleId: '2',
-    categoryId: '1',
+    articleId: 2,
+    categoryId: 1,
   },
 ];
