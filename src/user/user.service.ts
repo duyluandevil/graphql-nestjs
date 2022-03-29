@@ -4,6 +4,9 @@ import user from 'src/data/user';
 import internal from 'stream';
 import { CreateUserInput, LoginInput, User } from './user.schema';
 
+//Encrypt with MD5
+import {Md5} from "md5-typescript";
+
 @Injectable()
 export class UserService {
   user: Partial<User>[];
@@ -25,14 +28,14 @@ export class UserService {
   }
 
   async createUser(nUser: CreateUserInput) {
-    if (this.checkData(nUser)) {
-      //validate
+    if (this.checkData(nUser)) { //validate
+      //if all input's true, create new
+
+      nUser.password = Md5.init(nUser.password); //Encrypt password
       user.push(nUser);
       return [nUser];
     }
     throw new Error("Wrong data input");
-
-    // console.log(this.checkData(nUser))
   }
 
   async deleteUser(id: string) {
@@ -79,10 +82,10 @@ export class UserService {
 
     // Check that user exists
     // Validate user
-    if(!user || password !== user.password)
-      throw new Error('Wrong email address')
-    else if(password !== user.password)
-      throw new Error('Wrong password')
+    if(!user)
+      return false
+    else if(Md5.init(password).toString() !== Md5.init(user.password).toString())
+      return false
     // return the user
     return true;
 
