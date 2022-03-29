@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { ApolloDriverConfig, ApolloDriver } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -8,9 +9,13 @@ import { UserModule } from './user/user.module';
 import { ArticleModule } from './article/article.module';
 import { CategoryModule } from './category/category.module';
 import { ArticleRCategoryModule } from './article_r_category/article_r_category.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import 'dotenv/config'; //import dotenv
+
 
 @Module({
   imports: [
+    MongooseModule.forRoot(process.env.MONGO_DB_CONNECTION_STRING),
     UserModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
