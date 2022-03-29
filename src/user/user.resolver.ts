@@ -16,7 +16,7 @@ export class UserResolver {
 
   @Query(() => [User])
   async user(@Args('limit') limit: string, @Args('name') name: string) {
-    if(name){
+    if (name) {
       return this.userService.findWithCount(Number.parseInt(limit), name);
     }
     return this.userService.findAll(Number.parseInt(limit));
@@ -28,19 +28,22 @@ export class UserResolver {
     return this.userService.createUser(user);
   }
 
-  @Query(() => [User]) //Delete User
-  async deleteUser(@Args('args') args: string) {
-    return this.userService.deleteUser(args);
+  @Query(() => Boolean) //Delete User
+  async deleteUser(@Args('_id') id: string) {
+    return this.userService.deleteUser(id);
   }
 
-  @Mutation(()=> [User]) // Update user
-  async updateUser(@Args('input') user: CreateUserInput) {
-    return this.userService.updateUser(user);
+  @Mutation(() => [User]) // Update user
+  async updateUser(
+    @Args('_id') id: string,
+    @Args('input') user: CreateUserInput,
+  ) {
+    return this.userService.updateUser(id, user);
   }
 
   //Login
   @Query(() => Boolean)
-  async loginUser(@Args('input') user: LoginInput) {
-    return this.userService.login(user);
+  async loginUser(@Args('email') email: string, @Args('password') password: string) {
+    return this.userService.login(email, password);
   }
 }

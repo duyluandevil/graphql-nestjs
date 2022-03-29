@@ -3,7 +3,7 @@
 # ------------------------------------------------------
 
 type User {
-  id: ID!
+  _id: ID!
   username: String!
   password: String!
   email: String!
@@ -34,8 +34,8 @@ type Article_R_Category {
 type Query {
   users(limit: String!): [User!]!
   user(limit: String!, name: String!): [User!]!
-  deleteUser(args: String!): [User!]!
-  loginUser(input: LoginInput!): Boolean!
+  deleteUser(_id: String!): Boolean!
+  loginUser(email: String!, password: String!): Boolean!
   articles(limit: String!, categoryId: String!, userId: String!): [Article!]!
   categories(limit: String!): [Category!]!
   category(limit: String!, name: String!): [Category!]!
@@ -43,21 +43,15 @@ type Query {
   article_r_category(limit: String!): [Article_R_Category!]!
 }
 
-input LoginInput {
-  email: String!
-  password: String!
-}
-
 type Mutation {
   createUser(input: CreateUserInput!): [User!]!
-  updateUser(input: CreateUserInput!): [User!]!
+  updateUser(_id: String!, input: CreateUserInput!): [User!]!
   createCategory(input: CreateCategoryInput!): [Category!]!
   updateCategory(input: UpdateCategoryInput!): [Category!]!
   createArticleRCategory(input: CreateARCInput!): [Article_R_Category!]!
 }
 
 input CreateUserInput {
-  id: Float!
   username: String!
   password: String!
   email: String!

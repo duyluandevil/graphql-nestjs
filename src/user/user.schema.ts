@@ -11,7 +11,7 @@ export type UserDocument = User & Document;
 @ObjectType()
 export class User {
   @Field(() => ID) //store for schema.gql with field ID
-  id: number; //create field to get on graphql
+  _id: number; //create field to get on graphql
 
   @Prop()
   @Field(() => String)
@@ -36,19 +36,17 @@ export const UserSchema = SchemaFactory.createForClass(User); //create user sche
 @InputType()
 export class CreateUserInput {
   // get data input from client
-  @Field()
-  id: number;
 
-  @Field(() => String)
+  @Field()
   username: string;
 
-  @Field(() => String)
+  @Field()
   password: string;
 
-  @Field(() => String)
+  @Field()
   email: string;
 
-  @Field(() => String)
+  @Field()
   name: string;
 }
 
@@ -60,4 +58,3 @@ export class LoginInput {
   @Field()
   password: string;
 }
-
