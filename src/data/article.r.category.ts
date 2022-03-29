@@ -18,4 +18,8 @@ export default [
     articleId: '2',
     categoryId: '5',
   },
+  {
+    articleId: '2',
+    categoryId: '1',
+  },
 ];

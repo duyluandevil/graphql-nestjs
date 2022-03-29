@@ -26,16 +26,23 @@ type Category {
   description: String!
 }
 
+type Article_R_Category {
+  articleId: ID!
+  categoryId: ID!
+}
+
 type Query {
   users(limit: String!): [User!]!
   user(limit: String!, name: String!): [User!]!
   deleteUser(args: String!): [User!]!
   loginUser(input: LoginInput!): Boolean!
   article(args: String!): [Article!]!
-  listArticle(userId: String!): [Article!]!
+  listArticleByUser(userId: String!): [Article!]!
+  listArticleByCategory(categoryId: String!): [Article!]!
   categories(limit: String!): [Category!]!
   category(limit: String!, name: String!): [Category!]!
   deleteCategory(id: String!): Boolean!
+  article_r_category(limit: String!): [Article_R_Category!]!
 }
 
 input LoginInput {

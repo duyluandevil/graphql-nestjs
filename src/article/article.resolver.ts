@@ -22,8 +22,14 @@ export class ArticleResolver {
 
   //List article with filter userid
   @Query(()=> [Article])
-  async listArticle(@Args('userId') userId: string){
+  async listArticleByUser(@Args('userId') userId: string){
     return this.articleService.filterUser(userId);
+  }
+
+  //List article with filter categoryId
+  @Query(()=> [Article])
+  async listArticleByCategory(@Args('categoryId') categoryId: string){
+    return this.articleService.filterCategory(categoryId);
   }
 
   @ResolveField(() => [User])
