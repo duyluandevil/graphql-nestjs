@@ -26,6 +26,7 @@ type Query {
   deleteUser(args: String!): [User!]!
   loginUser(input: LoginInput!): Boolean!
   article(args: String!): [Article!]!
+  listArticle(userId: String!): [Article!]!
 }
 
 input LoginInput {

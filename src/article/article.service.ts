@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import article from 'src/data/article';
 import { Article } from './article.schema';
@@ -17,5 +18,9 @@ export class ArticleService {
   async findOneById(id: string) {
     return [article.find((e) => e.id.toString() == id)];
     // console.log(user.find(e => e.id.toString() == id))
+  }
+
+  async filterUser(userId: string){
+    return article.filter(e=>e.userid.toString() === userId);
   }
 }

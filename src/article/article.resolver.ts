@@ -20,6 +20,12 @@ export class ArticleResolver {
     // return this.userService.findWithCount(count);
   }
 
+  //List article with filter userid
+  @Query(()=> [Article])
+  async listArticle(@Args('userId') userId: string){
+    return this.articleService.filterUser(userId);
+  }
+
   @ResolveField(() => [User])
   async user(@Parent() article: Article) {
     return await this.userService.findOneById(article.userid.toString());
