@@ -1,23 +1,21 @@
 /* eslint-disable prettier/prettier */
-import { Field, ID, InputType, Int, ObjectType } from '@nestjs/graphql';
-import { GraphQLID, GraphQLList, GraphQLString } from 'graphql';
-import { Article } from 'src/article/article.schema';
+import { Field, ID, InputType, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
 export class User {
-  @Field(() => GraphQLID) //store for schema.gql with field ID
+  @Field(() => ID) //store for schema.gql with field ID
   id: number; //create field to get on graphql
 
-  @Field(() => GraphQLString)
+  @Field(() => String)
   username: string;
 
-  @Field(() => GraphQLString)
+  @Field(() => String)
   password: string;
 
-  @Field(() => GraphQLString)
+  @Field(() => String)
   email: string;
 
-  @Field(() => GraphQLString)
+  @Field(() => String)
   name: string;
 }
 
@@ -28,16 +26,16 @@ export class CreateUserInput {
   @Field()
   id: number;
 
-  @Field(() => GraphQLString)
+  @Field(() => String)
   username: string;
 
-  @Field(() => GraphQLString)
+  @Field(() => String)
   password: string;
 
-  @Field(() => GraphQLString)
+  @Field(() => String)
   email: string;
 
-  @Field(() => GraphQLString)
+  @Field(() => String)
   name: string;
 }
 

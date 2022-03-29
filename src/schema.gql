@@ -21,7 +21,8 @@ type Article {
 }
 
 type Query {
-  user(args: String!): [User!]!
+  users(limit: String!): [User!]!
+  user(limit: String!, name: String!): [User!]!
   deleteUser(args: String!): [User!]!
   loginUser(input: LoginInput!): Boolean!
   article(args: String!): [Article!]!

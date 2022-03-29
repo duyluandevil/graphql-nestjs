@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
 import { User, CreateUserInput, LoginInput } from './user.schema';
 import { UserService } from './user.service';
 
@@ -10,11 +9,17 @@ export class UserResolver {
 
   //CRUD
   @Query(() => [User])
-  async user(@Args('args') args: string) {
-    if (args) {
-      return this.userService.findOneById(args);
+  async users(@Args('limit') limit: string) {
+    return this.userService.findAll(Number.parseInt(limit));
+    // return this.userService.findWithCount(count);
+  }
+
+  @Query(() => [User])
+  async user(@Args('limit') limit: string, @Args('name') name: string) {
+    if(name){
+      return this.userService.findWithCount(Number.parseInt(limit), name);
     }
-    return this.userService.findAll();
+    return this.userService.findAll(Number.parseInt(limit));
     // return this.userService.findWithCount(count);
   }
 

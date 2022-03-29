@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import user from 'src/data/user';
+import internal from 'stream';
 import { CreateUserInput, LoginInput, User } from './user.schema';
 
 @Injectable()
@@ -9,9 +10,9 @@ export class UserService {
   constructor() {
     this.user = user;
   }
-  async findAll() {
-    //func to return all user in data
-    return user;
+  async findAll(limit: number) {
+    //func to return all user in data with limit
+    return user.slice(0, limit);
   }
 
   async findOneById(id: string) {
@@ -19,12 +20,8 @@ export class UserService {
     // console.log(user.find(e => e.id.toString() == id))
   }
 
-  async findWithCount(count: number) {
-    const arrayWithCount = [];
-    for (let i = 0; i < count; i++) {
-      arrayWithCount[i] = user[i];
-    }
-    return arrayWithCount;
+  async findWithCount(limit: number, name: string) {
+    return [user.find(e=>e.name === name)].slice(0, limit);
   }
 
   async createUser(nUser: CreateUserInput) {
@@ -82,7 +79,7 @@ export class UserService {
 
     // Check that user exists
     // Validate user
-    if(!user)
+    if(!user || password !== user.password)
       throw new Error('Wrong email address')
     else if(password !== user.password)
       throw new Error('Wrong password')
