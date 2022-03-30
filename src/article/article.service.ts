@@ -7,6 +7,7 @@ import articleRCategory from 'src/data/article.r.category';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from 'src/user/user.schema';
+import { Category, CategoryDocument } from 'src/category/category.schema';
 
 @Injectable()
 export class ArticleService {
@@ -14,6 +15,7 @@ export class ArticleService {
   constructor(
     @InjectModel(Article.name) private articleModel: Model<ArticleDocument>,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(Category.name) private categoryModel: Model<CategoryDocument>,
   ) {}
 
   async find(query) {
@@ -28,7 +30,8 @@ export class ArticleService {
     if(query.limit && isNaN(query.limit)) {
       throw new Error('Param limit is not number');
     }
-    //is limit exists?
+
+    //Check all params transmission
     if(!query.limit) { //limit is null
       //is search exists?
       if(!query.search) { //search is null
@@ -209,7 +212,21 @@ export class ArticleService {
     }
   }
 
+  //func for ResolveField User
   async findOneUser(id: string){
     return [this.userModel.findOne({_id: id})];
+  }
+
+  async findCategories(id: string[]){
+    // return this.categoryModel.find({_id: id});
+    // console.log(id)
+    const arrayResult = [];
+
+    for(let i=0; i<id.length;i++){
+      if(this.categoryModel.findOne({ _id: id[i] })){
+        arrayResult.push(await this.categoryModel.findOne({ _id: id[i] }));
+      }
+    }
+    return arrayResult;
   }
 }

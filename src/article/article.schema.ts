@@ -36,9 +36,9 @@ export class Article {
   @Field(() => User)
   userid: User | string;
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Category' })
-  @Field(() => [Category])
-  categoryid: Category[] | string;
+  @Prop({type: [String]}) //create array in mongodb
+  @Field(() => [String])
+  categoryid:  [string];
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article);

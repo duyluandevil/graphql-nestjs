@@ -4,6 +4,7 @@ import { Article } from './article.schema';
 import { ArticleService } from './article.service';
 import { UserService } from '../user/user.service';
 import { User } from 'src/user/user.schema';
+import { Category } from 'src/category/category.schema';
 
 @Resolver(() => Article)
 export class ArticleResolver {
@@ -45,5 +46,10 @@ export class ArticleResolver {
   @ResolveField(() => [User])
   async user(@Parent() article: Article) {
     return this.articleService.findOneUser(article.userid.toString());
+  }
+
+  @ResolveField(() => [Category])
+  async categories(@Parent() article: Article) {
+    return this.articleService.findCategories(article.categoryid);   
   }
 }

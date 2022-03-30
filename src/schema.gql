@@ -16,12 +16,6 @@ type JsonResponse {
   data: User
 }
 
-type Category {
-  _id: ID!
-  name: String!
-  description: String!
-}
-
 type Article {
   id: ID!
   title: String!
@@ -29,8 +23,15 @@ type Article {
   thumbnail: String!
   status: String!
   userid: User!
-  categoryid: [Category!]!
+  categoryid: [String!]!
   user: [User!]!
+  categories: [Category!]!
+}
+
+type Category {
+  _id: ID!
+  name: String!
+  description: String!
 }
 
 type Query {
