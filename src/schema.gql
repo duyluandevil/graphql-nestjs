@@ -13,7 +13,13 @@ type User {
 type JsonResponse {
   success: Boolean!
   message: String!
-  data: User!
+  data: User
+}
+
+type Category {
+  id: ID!
+  name: String!
+  description: String!
 }
 
 type Article {
@@ -23,28 +29,23 @@ type Article {
   thumbnail: String!
   status: String!
   userid: User!
+  categoryid: [Category!]!
   user: [User!]!
 }
 
-type Category {
-  id: ID!
-  name: String!
-  description: String!
-}
-
 type Query {
-  user(limit: String!, search: String!): [User!]!
-  deleteUser(_id: String!): JsonResponse!
+  users(page: String!, limit: String!, search: String!): [User!]!
   loginUser(email: String!, password: String!): JsonResponse
-  articles(limit: String!, categoryId: String!, userId: String!): [Article!]!
+  articles(limit: String!, search: String!, categoryId: String!, userId: String!): [Article!]!
   categories(limit: String!): [Category!]!
   category(limit: String!, name: String!): [Category!]!
   deleteCategory(id: String!): Boolean!
 }
 
 type Mutation {
-  createUser(input: CreateUserInput!): [User!]!
-  updateUser(_id: String!, input: CreateUserInput!): [User!]!
+  createUser(input: CreateUserInput!): JsonResponse
+  deleteUser(_id: String!): JsonResponse
+  updateUser(_id: String!, input: CreateUserInput!): JsonResponse!
   createCategory(input: CreateCategoryInput!): [Category!]!
   updateCategory(input: UpdateCategoryInput!): [Category!]!
 }

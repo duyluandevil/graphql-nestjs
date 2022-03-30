@@ -69,7 +69,7 @@ export class JsonResponse {
   @Field()
   message: string;
 
-  @Field()
+  @Field(()=> User, { nullable: true })
   data: User;
 
 }

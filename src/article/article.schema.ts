@@ -6,6 +6,7 @@ import { User } from 'src/user/user.schema';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 import mongoose from 'mongoose';
+import { Category } from 'src/category/category.schema';
 
 export type ArticleDocument = Article & Document;
 
@@ -34,6 +35,10 @@ export class Article {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   @Field(() => User)
   userid: User | number;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Category' })
+  @Field(() => [Category])
+  categoryid: Category[] | number;
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article);

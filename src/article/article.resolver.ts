@@ -26,41 +26,16 @@ export class ArticleResolver {
     */
 
     @Query(() => [Article])
-    async articles(@Args('limit') limit: string, @Args('categoryId') categoryId: string, @Args('userId') userId: string) {
-      if( categoryId.length === 0 && userId.length === 0 ){
-        return this.articleService.findAll(Number.parseInt(limit))
-      }
-      else if( categoryId.length === 0 && userId.length !== 0 ){ //return filter by userId
-        return this.articleService.filterUser(userId)
-      }
-      else if( categoryId.length !== 0 && userId.length === 0  ){ //return filter by category
-        return this.articleService.filterCategory(categoryId);
-      }
-      else if( categoryId.length !== 0 && userId.length !== 0  ){ //return data filter 2 params
-        return this.articleService.filterCategoryAndUser(categoryId, userId)
-      }
+    async articles(@Args('limit') limit: string, @Args('search') search: string, @Args('categoryId') categoryId: string, @Args('userId') userId: string) {
+      return this.articleService.find(
+        {
+          limit: limit,
+          search: search,
+          categoryId: categoryId,
+          userId: userId
+        }
+      )
     }
-
-  // @Query(() => [Article])
-  // async article(@Args('args') args: string) {
-  //   if (args) {
-  //     return this.articleService.findOneById(args);
-  //   }
-  //   return this.articleService.findAll();
-  //   // return this.userService.findWithCount(count);
-  // }
-
-  // //List article with filter userid
-  // @Query(() => [Article])
-  // async listArticleByUser(@Args('userId') userId: string) {
-  //   return this.articleService.filterUser(userId);
-  // }
-
-  // //List article with filter categoryId
-  // @Query(() => [Article])
-  // async listArticleByCategory(@Args('categoryId') categoryId: string) {
-  //   return this.articleService.filterCategory(categoryId);
-  // }
 
   @ResolveField(() => [User])
   async user(@Parent() article: Article) {

@@ -10,31 +10,38 @@ export class UserResolver {
 
   //Final query user
   @Query(() => [User])
-  async user(@Args('limit') limit: string, @Args('search') search: string){
-    return this.userService.find({ limit: Number.parseInt(limit), search: search });
-  } 
-
-  @Mutation(() => [User]) // Create User
-  async createUser(@Args('input') user: CreateUserInput) {
-    return this.userService.createUser(user);
+  async users(
+    @Args('page') page: string,
+    @Args('limit') limit: string,
+    @Args('search') search: string,
+  ) {
+    return this.userService.find({ page: page, limit: limit, search: search });
   }
 
-  @Query(() => JsonResponse) //Delete User
+  //Login
+  @Query(() => JsonResponse, { nullable: true })
+  async loginUser(
+    @Args('email') email: string,
+    @Args('password') password: string,
+  ) {
+    return this.userService.login({ email: email, password: password });
+  }
+
+  @Mutation(() => JsonResponse, { nullable: true }) // Create User
+  async createUser(@Args('input') input: CreateUserInput) {
+    return this.userService.createUser(input);
+  }
+
+  @Mutation(() => JsonResponse, { nullable: true }) //Delete User
   async deleteUser(@Args('_id') id: string) {
     return this.userService.deleteUser(id);
   }
 
-  @Mutation(() => [User]) // Update user
+  @Mutation(() => JsonResponse) // Update user
   async updateUser(
     @Args('_id') id: string,
     @Args('input') user: CreateUserInput,
   ) {
     return this.userService.updateUser(id, user);
-  }
-
-  //Login
-  @Query(() => JsonResponse, {nullable: true})
-  async loginUser(@Args('email') email: string, @Args('password') password: string) {
-    return this.userService.login({email: email, password :password});
   }
 }
