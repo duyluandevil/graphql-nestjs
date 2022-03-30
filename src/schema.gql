@@ -42,6 +42,7 @@ type Query {
 }
 
 type Mutation {
+  mutationUsers(_id: String!, input: CreateUserInput): JsonResponse!
   createUser(input: CreateUserInput!): JsonResponse
   deleteUser(_id: String!): JsonResponse
   updateUser(_id: String!, input: CreateUserInput!): JsonResponse!

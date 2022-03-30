@@ -27,6 +27,21 @@ export class UserResolver {
     return this.userService.login({ email: email, password: password });
   }
 
+  @Mutation(() => JsonResponse)
+  async mutationUsers(
+    @Args('_id') id: string,
+    @Args('input', { nullable:true }) input: CreateUserInput,
+  ){
+    //Create
+    if(!id && input) return this.userService.createUser(input);
+    
+    //Update
+    if(id && input) return this.userService.updateUser(id, input);
+
+    //Delete
+    if(id && !input) return this.userService.deleteUser(id);
+  }
+
   @Mutation(() => JsonResponse, { nullable: true }) // Create User
   async createUser(@Args('input') input: CreateUserInput) {
     return this.userService.createUser(input);
