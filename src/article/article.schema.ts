@@ -13,23 +13,23 @@ export type ArticleDocument = Article & Document;
 @Schema()
 @ObjectType()
 export class Article {
-  @Field(() => GraphQLID) //store for schema.gql with field ID
+  @Field(() => ID) //store for schema.gql with field ID
   id: number; //create field to get on graphql
 
   @Prop()
-  @Field(() => GraphQLString)
+  @Field(() => String)
   title: string;
 
   @Prop()
-  @Field(() => GraphQLString)
+  @Field(() => String)
   content: string;
 
   @Prop()
-  @Field(() => GraphQLString)
+  @Field(() => String)
   thumbnail: string;
 
   @Prop()
-  @Field(() => GraphQLString)
+  @Field(() => String)
   status: string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
@@ -44,5 +44,41 @@ export class Article {
 export const ArticleSchema = SchemaFactory.createForClass(Article);
 
 
+@InputType()
+export class CreateArticleInput{
+  @Field(() => String)
+  title: string;
+
+  @Field(() => String)
+  content: string;
+
+  @Field(() => String)
+  thumbnail: string;
+
+  @Field(() => String)
+  status: string;
+
+  @Field(() => String)
+  userid: string;
+
+  @Field(() => [String])
+  categoryid:  [string];
+
+}
+
+//Json Response
+@ObjectType()
+export class JsonResponseArticle {
+
+  @Field() //store for schema.gql with field ID
+  success: boolean; //create field to get on graphql
+
+  @Field()
+  message: string;
+
+  @Field(()=> Article, { nullable: true })
+  data: Article;
+
+}
 
 

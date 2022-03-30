@@ -28,6 +28,12 @@ type Article {
   categories: [Category!]!
 }
 
+type JsonResponseArticle {
+  success: Boolean!
+  message: String!
+  data: Article
+}
+
 type Category {
   _id: ID!
   name: String!
@@ -47,6 +53,7 @@ type Mutation {
   createUser(input: CreateUserInput!): JsonResponse
   deleteUser(_id: String!): JsonResponse
   updateUser(_id: String!, input: CreateUserInput!): JsonResponse!
+  mutationArticles(id: String, input: CreateArticleInput): JsonResponseArticle!
   createCategory(input: CreateCategoryInput!): JsonResponse
   updateCategory(_id: String!, input: CreateCategoryInput!): [Category!]!
 }
@@ -56,6 +63,15 @@ input CreateUserInput {
   password: String!
   email: String!
   name: String!
+}
+
+input CreateArticleInput {
+  title: String!
+  content: String!
+  thumbnail: String!
+  status: String!
+  userid: String!
+  categoryid: [String!]!
 }
 
 input CreateCategoryInput {

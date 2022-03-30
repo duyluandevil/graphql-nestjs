@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
-import { Article } from './article.schema';
+import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Article, CreateArticleInput, JsonResponseArticle } from './article.schema';
 import { ArticleService } from './article.service';
 import { UserService } from '../user/user.service';
 import { User } from 'src/user/user.schema';
@@ -41,6 +41,18 @@ export class ArticleResolver {
       categoryid: categoryid,
       userid: userid,
     });
+  }
+
+  @Mutation(() => JsonResponseArticle)
+  async mutationArticles(@Args('id', { nullable:true }) id:string, @Args('input', { nullable:true }) input: CreateArticleInput){
+    //create
+    if(!id && input) return this.articleService.createArticle(input);
+
+    //delete
+    if(id && !input) return this.articleService.deleteArticle(id);
+
+    //Update
+    if(id && input) return this.articleService.updateArticle(id, input);
   }
 
   @ResolveField(() => [User])
