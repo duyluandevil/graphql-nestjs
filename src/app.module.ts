@@ -8,7 +8,6 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { ArticleModule } from './article/article.module';
 import { CategoryModule } from './category/category.module';
-import { ArticleRCategoryModule } from './article_r_category/article_r_category.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import 'dotenv/config'; //import dotenv
 
@@ -23,7 +22,6 @@ import 'dotenv/config'; //import dotenv
     }),
     ArticleModule,
     CategoryModule,
-    ArticleRCategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

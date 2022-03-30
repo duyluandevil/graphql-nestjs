@@ -3,13 +3,12 @@
 import { Injectable } from '@nestjs/common';
 import article from 'src/data/article';
 import { Article } from './article.schema';
-import { ArticleRCategoryService } from '../article_r_category/article_r_category.service';
 import articleRCategory from 'src/data/article.r.category';
 
 @Injectable()
 export class ArticleService {
   article: Partial<Article>[];
-  constructor(private articleRCategoryService: ArticleRCategoryService) {
+  constructor() {
     this.article = article;
   }
 

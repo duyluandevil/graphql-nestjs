@@ -32,11 +32,6 @@ type Category {
   description: String!
 }
 
-type Article_R_Category {
-  articleId: ID!
-  categoryId: ID!
-}
-
 type Query {
   user(limit: String!, search: String!): [User!]!
   deleteUser(_id: String!): JsonResponse!
@@ -45,7 +40,6 @@ type Query {
   categories(limit: String!): [Category!]!
   category(limit: String!, name: String!): [Category!]!
   deleteCategory(id: String!): Boolean!
-  article_r_category(limit: String!): [Article_R_Category!]!
 }
 
 type Mutation {
@@ -53,7 +47,6 @@ type Mutation {
   updateUser(_id: String!, input: CreateUserInput!): [User!]!
   createCategory(input: CreateCategoryInput!): [Category!]!
   updateCategory(input: UpdateCategoryInput!): [Category!]!
-  createArticleRCategory(input: CreateARCInput!): [Article_R_Category!]!
 }
 
 input CreateUserInput {
@@ -73,9 +66,4 @@ input UpdateCategoryInput {
   id: ID!
   name: String!
   description: String!
-}
-
-input CreateARCInput {
-  articleId: ID!
-  categoryId: ID!
 }
