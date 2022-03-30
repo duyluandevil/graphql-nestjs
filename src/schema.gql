@@ -36,7 +36,7 @@ type Article {
 type Query {
   users(page: String!, limit: String!, search: String!): [User!]!
   loginUser(email: String!, password: String!): JsonResponse
-  articles(limit: String!, search: String!, categoryId: String!, userId: String!): [Article!]!
+  articles(page: String!, limit: String!, search: String!, categoryid: String, userid: String): [Article!]!
   categories(page: String!, limit: String!, search: String!): [Category!]!
   deleteCategory(id: String!): JsonResponse
 }

@@ -1,105 +1,105 @@
 /* eslint-disable prefer-const */
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import article from 'src/data/article';
 import { Article, ArticleDocument } from './article.schema';
 import articleRCategory from 'src/data/article.r.category';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { User, UserDocument } from 'src/user/user.schema';
 
 @Injectable()
 export class ArticleService {
   article: Partial<Article>[];
   constructor(
     @InjectModel(Article.name) private articleModel: Model<ArticleDocument>,
-  ) {
-  }
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+  ) {}
 
-  async find(query){
-    const {
-      limit, 
-      search,
-      userid,
-      categoryid
-    } = query;
-    
-    let where = [];
+  async find(query) {
+    const { page, limit, search, userid, categoryid } = query;
 
-    if(query.limit){
-      //suy nghĩ về việc viết gộp, check các property trong query rồi trả về 1 return
-
+    //validate data
+    if (query.page && isNaN(query.page)) {
+      throw new Error('Param page is not number');
     }
-    
-    console.log( (await this.articleModel.find({ "title": new RegExp(query.search) }))[0].userid )
-  }
+    if (query.limit && isNaN(query.limit)) {
+      throw new Error('Param limit is not number');
+    }
+    // if (query.userid && isNaN(query.userid)) {
+    //   throw new Error('Param userid is not number');
+    // }
+    // if (query.categoryid && isNaN(query.categoryid)) {
+    //   throw new Error('Param categoryid is not number');
+    // }
 
-  async findAll(limit: number) {
-    //func to return all user in data
-    return article.slice(0, limit);
-  }
-
-  async findOneById(id: string) {
-    return [article.find((e) => e.id.toString() == id)];
-    // console.log(user.find(e => e.id.toString() == id))
-  }
-
-  async filterUser(userId: string) {
-    return article.filter((e) => e.userid.toString() === userId);
-  }
-
-  async filterCategory(categoryId: string) {
-    // articleRCategory.filter(e => e.categoryId === categoryId.toString())
-
-    //get value from detail
-    let arrayMtach = articleRCategory.filter(
-      (e) => e.categoryId.toString() == categoryId.toString(),
-    );
-
-    let arrayArticleId = []; // array has id of article
-    arrayMtach.forEach((e) => arrayArticleId.push(e.articleId));
-
-    let arrayResultEnd = []; // create array for return articles
-    arrayArticleId.forEach((e) =>
-      arrayResultEnd.push(article.find((ele) => ele.id.toString() == e)),
-    );
-
-    return arrayResultEnd;
-  }
-
-  //get data filter 2 prams is userid and categoryId
-  async filterCategoryAndUser(categoryId: string, userId: string) {
-    let arrayMtach = articleRCategory.filter(
-      (e) => e.categoryId.toString() === categoryId.toString(),
-    );
-
-    let arrayArticleId = []; // array has id of article
-    arrayMtach.forEach((e) => arrayArticleId.push(e.articleId));
-
-    let arrayResultWithCategory = []; // create array for return articles with category
-    arrayArticleId.forEach((e) =>
-      arrayResultWithCategory.push(
-        article.find((ele) => ele.id.toString() == e),
-      ),
-    );
-
-    // console.log(arrayResultWithCategory);
-
-    let arrayResultEnd = []; // create array for return articles with category and userid
-    arrayResultWithCategory.forEach((e) => {
-        if(e.userid.toString() === userId)
-          arrayResultEnd.push(e)
+    //is limit exists?
+    if (!query.limit) { //limit is null
+      //is search exists?
+      if (!query.search) { //search is null
+        if (!query.page){ // page is null return all user with default limit
+          if(query.userid && !query.categoryid){ //filter by userid
+            return this.articleModel.find({ userid: Number.parseInt(query.userid)}).limit(10);
+          }
+          else if(!query.userid && query.categoryid){//filter by categoryid
+            console.log("Filter by category")
+          }
+          else if(!query.userid && !query.categoryid){//return all
+            return this.articleModel.find().limit(10);
+          }
+        }
+        else{ //page is not null return all user with default limit
+          if(query.userid && !query.categoryid){ //filter by userid
+            return this.articleModel
+            .find({ userid: Number.parseInt(query.userid)})
+            .limit(10)
+            .skip(5 * Number.parseInt(query.page));
+          }
+          else if(!query.userid && query.categoryid){//filter by categoryid
+            console.log("Filter by category and with page")
+          }
+        }
+      } else {
+        //search is not null
+        if (!query.page)
+          return this.articleModel
+            .find({ name: new RegExp(query.search) })
+            .limit(10);
+        else
+          return this.articleModel
+            .find({ name: new RegExp(query.search) })
+            .limit(10)
+            .skip(5 * Number.parseInt(query.page)); //câu hỏi
       }
-    );
+    } else {
+      //limit is not null
 
-    return arrayResultEnd;
-
-    // console.log(arrayMtach);
+      if (!query.search) {
+        //search is null
+        if (!query.page)
+          return this.articleModel.find().limit(Number.parseInt(query.limit));
+        // page is null return all user with default limit
+        else
+          return this.articleModel
+            .find()
+            .limit(Number.parseInt(query.limit))
+            .skip(5 * Number.parseInt(query.page)); // page is not null return all user with default limit
+      } else {
+        //search is not null
+        if (!query.page)
+          return this.articleModel
+            .find({ name: new RegExp(query.search) })
+            .limit(Number.parseInt(query.limit));
+        else
+          return this.articleModel
+            .find({ name: new RegExp(query.search) })
+            .limit(Number.parseInt(query.limit))
+            .skip(5 * Number.parseInt(query.page));
+      }
+    }
   }
 
-  
-  // async find(query){
-  //   if(query.search)
-
-  //   //query is object, check each property of query, each prop return result
-  // }
+  async findOneUser(id: string){
+    return [this.userModel.findOne({_id: id})];
+  }
 }

@@ -34,11 +34,11 @@ export class Article {
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   @Field(() => User)
-  userid: User | number;
+  userid: User | string;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Category' })
   @Field(() => [Category])
-  categoryid: Category[] | number;
+  categoryid: Category[] | string;
 }
 
 export const ArticleSchema = SchemaFactory.createForClass(Article);

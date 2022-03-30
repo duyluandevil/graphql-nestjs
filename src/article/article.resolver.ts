@@ -25,23 +25,25 @@ export class ArticleResolver {
     }
     */
 
-    @Query(() => [Article])
-    async articles(@Args('limit') limit: string, @Args('search') search: string, @Args('categoryId') categoryId: string, @Args('userId') userId: string) {
-      return this.articleService.find(
-        {
-          limit: limit,
-          search: search,
-          categoryId: categoryId,
-          userId: userId
-        }
-      )
-    }
+  @Query(() => [Article])
+  async articles(
+    @Args('page') page: string,
+    @Args('limit') limit: string,
+    @Args('search') search: string,
+    @Args('categoryid', {nullable: true}) categoryid: string,
+    @Args('userid', {nullable: true}) userid: string,
+  ) {
+    return this.articleService.find({
+      page: page,
+      limit: limit,
+      search: search,
+      categoryid: categoryid,
+      userid: userid,
+    });
+  }
 
   @ResolveField(() => [User])
   async user(@Parent() article: Article) {
-    // return await this.userService.findOneById(article.userid.toString());
-    // console.log(this.userService.findOneById(article.userid.toString()))
-    // console.log(typeof article.userid)
-    // // console.log(user.articleId)
+    return this.articleService.findOneUser(article.userid.toString());
   }
 }
