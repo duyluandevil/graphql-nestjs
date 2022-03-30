@@ -24,7 +24,8 @@ export class UserService {
 
   //1 page chứa 5 records
 
-  //find
+  //CRUD
+  //find for read
   async find(query) {
     const { page, limit, search } = query;
 
@@ -90,6 +91,7 @@ export class UserService {
     }
   }
 
+  //create new user
   async createUser(nUser: CreateUserInput) {
     const userMatchUsername = await this.userModel.findOne({
       username: nUser.username,
@@ -134,6 +136,7 @@ export class UserService {
     }
   }
 
+  //delete user in database
   async deleteUser(id: string) {
     //validate
     if (await this.userModel.findOne({ _id: id })) {
@@ -151,6 +154,7 @@ export class UserService {
     }
   }
 
+  //update information in database
   async updateUser(id: string, uUser: CreateUserInput) {
     const currentUser = await this.userModel.findOne({ _id: id });
     if (currentUser) {
@@ -196,18 +200,6 @@ export class UserService {
     else if (user.password.length < 6 || user.password.length > 20)
       flag = false;
     else if (user.name.length < 6 || user.name.length > 30) flag = false;
-
-    return flag;
-  }
-
-  //func validate data input
-  checkDataUpdate(user: User) {
-    //username
-    let flag = true;
-    if (user.username.length < 6 || user.username.length > 20) flag = false;
-    else if (user.password.length < 6 || user.password.length > 20)
-      flag = false;
-    else if (user.name.length < 6 || user.name.length > 20) flag = false;
 
     return flag;
   }
