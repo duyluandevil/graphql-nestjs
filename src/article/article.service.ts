@@ -19,82 +19,192 @@ export class ArticleService {
   async find(query) {
     const { page, limit, search, userid, categoryid } = query;
 
+  
+
     //validate data
-    if (query.page && isNaN(query.page)) {
+    if(query.page && isNaN(query.page)) {
       throw new Error('Param page is not number');
     }
-    if (query.limit && isNaN(query.limit)) {
+    if(query.limit && isNaN(query.limit)) {
       throw new Error('Param limit is not number');
     }
-    // if (query.userid && isNaN(query.userid)) {
-    //   throw new Error('Param userid is not number');
-    // }
-    // if (query.categoryid && isNaN(query.categoryid)) {
-    //   throw new Error('Param categoryid is not number');
-    // }
-
     //is limit exists?
-    if (!query.limit) { //limit is null
+    if(!query.limit) { //limit is null
       //is search exists?
-      if (!query.search) { //search is null
-        if (!query.page){ // page is null return all user with default limit
-          if(query.userid && !query.categoryid){ //filter by userid
-            return this.articleModel.find({ userid: Number.parseInt(query.userid)}).limit(10);
+      if(!query.search) { //search is null
+        if (!query.page){ // page is null 
+          if(query.userid && !query.categoryid){ //limit null, search null, page null, category null, userid NOT NULL
+            const array = await this.articleModel.find().limit(10); //delcare array stores article
+            const resultArray = []; // delcare array stores end result
+            array.forEach(e=> {
+              if(e.userid == query.userid) //find article which match userid
+              resultArray.push(e)
+            } )
+            return resultArray 
           }
-          else if(!query.userid && query.categoryid){//filter by categoryid
+          else if(!query.userid && query.categoryid){//limit null, search null, page null, category NOT NULL, userid null
             console.log("Filter by category")
           }
-          else if(!query.userid && !query.categoryid){//return all
+          else if(!query.userid && !query.categoryid){//limit null, search null, page null, category null, userid null
             return this.articleModel.find().limit(10);
           }
         }
         else{ //page is not null return all user with default limit
-          if(query.userid && !query.categoryid){ //filter by userid
+          if(query.userid && !query.categoryid){ //limit null, search null, page NOT NULL, category null, userid NOT NULL
+
+            const array = await this.articleModel
+            .find()
+            .limit(10)
+            .skip(5 * Number.parseInt(query.page)); //delcare array stores article
+            const resultArray = []; // delcare array stores end result
+            array.forEach(e=> {
+              if(e.userid == query.userid) //find article which match userid
+              resultArray.push(e)
+            } )
+            return resultArray
+          }
+          else if(!query.userid && query.categoryid){//limit null, search null, page NOT NULL, category NOT NULL, userid null
+            console.log("Filter by category and with page")
+          }
+          else if(!query.userid && !query.categoryid){//limit null, search null, page NOT NULL, category null, userid null
+            return this.articleModel.find().limit(10).skip(5 * Number.parseInt(query.page));
+          }
+        }
+      } else { //search is not null
+        if(!query.page){ //page is null
+          if(query.userid && !query.categoryid){ //limit null, page null, search not null, categoryid null, userid not null
+            const array = await this.articleModel
+            .find({ title: new RegExp(query.search) })
+            .limit(10); //delcare array stores article
+            const resultArray = []; // delcare array stores end result
+            array.forEach(e=> {
+              if(e.userid == query.userid) //find article which match userid
+              resultArray.push(e)
+            } )
+            return resultArray
+          }
+          else if(!query.userid && query.categoryid){//limit null, page null, search null, categoryid not null, userid not null
+            console.log("Filter by category")
+          }
+          else if(!query.userid && !query.categoryid){//limit null, page null, search null, categoryid null, userid  null
             return this.articleModel
-            .find({ userid: Number.parseInt(query.userid)})
+            .find({ title: new RegExp(query.search) })
+            .limit(10);
+          }
+        }
+        else{ //page is not null
+          if(query.userid && !query.categoryid){ //limit null, search not null, page NOT NULL, category null, userid NOT NULL
+            const array = await this.articleModel
+            .find({ title: new RegExp(query.search) })
+            .limit(10)
+            .skip(5 * Number.parseInt(query.page)); //delcare array stores article
+            const resultArray = []; // delcare array stores end result
+            array.forEach(e=> {
+              if(e.userid == query.userid) //find article which match userid
+              resultArray.push(e)
+            } )
+            return resultArray
+          }
+          else if(!query.userid && query.categoryid){//limit null, search not null, page NOT NULL, category not null, userid NULL
+            console.log("Filter by category")
+          }
+          else if(!query.userid && !query.categoryid){//limit null, search not null, page NOT NULL, category null, userid NULL
+            return this.articleModel
+            .find({ title: new RegExp(query.search) })
             .limit(10)
             .skip(5 * Number.parseInt(query.page));
           }
-          else if(!query.userid && query.categoryid){//filter by categoryid
-            console.log("Filter by category and with page")
+        }
+      }
+    } else{ //limit is not null
+      if(!query.search) { //search is null
+        if (!query.page){ //page is null
+          if(query.userid && !query.categoryid){ //limit not null, page null, search null, categoryid null, userid not null
+            const array = await this.articleModel.find().limit(Number.parseInt(query.limit)); //delcare array stores article
+            const resultArray = []; // delcare array stores end result
+            array.forEach(e=> {
+              if(e.userid == query.userid) //find article which match userid
+              resultArray.push(e)
+            } )
+            return resultArray
+          }
+          else if(!query.userid && query.categoryid){//limit not null, page null, search null, categoryid not null, userid null
+            console.log("Filter by category")
+          }
+          else if(!query.userid && !query.categoryid){//limit not null, page null, search null, categoryid null, userid null
+            return this.articleModel.find().limit(Number.parseInt(query.limit));
           }
         }
-      } else {
-        //search is not null
-        if (!query.page)
-          return this.articleModel
-            .find({ name: new RegExp(query.search) })
-            .limit(10);
-        else
-          return this.articleModel
-            .find({ name: new RegExp(query.search) })
-            .limit(10)
-            .skip(5 * Number.parseInt(query.page)); //câu hỏi
-      }
-    } else {
-      //limit is not null
-
-      if (!query.search) {
-        //search is null
-        if (!query.page)
-          return this.articleModel.find().limit(Number.parseInt(query.limit));
-        // page is null return all user with default limit
-        else
-          return this.articleModel
+        else{ //page is NOT NULL
+          if(query.userid && !query.categoryid){ //limit not null, page not null, search null, categoryid null, userid not null
+            const array = await this.articleModel
+            .find()
+            .limit(Number.parseInt(query.limit))
+            .skip(5 * Number.parseInt(query.page)); 
+            
+            const resultArray = []; // delcare array stores end result
+            array.forEach(e=> {
+              if(e.userid == query.userid) //find article which match userid
+              resultArray.push(e)
+            } )
+            return resultArray
+            // console.log(array)
+          }
+          else if(!query.userid && query.categoryid){//limit not null, page not null, search null, categoryid not null, userid  null
+            console.log("Filter by category")
+          }
+          else if(!query.userid && !query.categoryid){//limit not null, page not null, search null, categoryid null, userid  null
+            return this.articleModel
             .find()
             .limit(Number.parseInt(query.limit))
             .skip(5 * Number.parseInt(query.page)); // page is not null return all user with default limit
-      } else {
-        //search is not null
-        if (!query.page)
-          return this.articleModel
-            .find({ name: new RegExp(query.search) })
+          }
+        }
+      }else { //search is not null
+        if (!query.page){ //page null
+          if(query.userid && !query.categoryid){ //limit not null, page null, search not null, categoryid null, userid not null
+            const array = await this.articleModel
+            .find({ title: new RegExp(query.search) })
+            .limit(Number.parseInt(query.limit)); //delcare array stores article
+            const resultArray = []; // delcare array stores end result
+            array.forEach(e=> {
+              if(e.userid == query.userid) //find article which match userid
+              resultArray.push(e)
+            } )
+            return resultArray 
+          }
+          else if(!query.userid && query.categoryid){//limit not null, page null, search not null, categoryid not null, userid  null
+            console.log("Filter by category")
+          }
+          else if(!query.userid && !query.categoryid){//limit not null, page null, search not null, categoryid  null, userid  null
+            return this.articleModel
+            .find({ title: new RegExp(query.search) })
             .limit(Number.parseInt(query.limit));
-        else
-          return this.articleModel
-            .find({ name: new RegExp(query.search) })
+          }
+        }
+        else{ //page not null
+          if(query.userid && !query.categoryid){ //limit not null, page not null, search not null, categoryid null, userid not null
+            const array = await this.articleModel
+            .find({ title: new RegExp(query.search) })
+            .limit(Number.parseInt(query.limit))
+            .skip(5 * Number.parseInt(query.page)); //delcare array stores article
+            const resultArray = []; // delcare array stores end result
+            array.forEach(e=> {
+              if(e.userid == query.userid) //find article which match userid
+              resultArray.push(e)
+            } )
+            return resultArray 
+          }
+          else if(!query.userid && query.categoryid){ //limit not null, page not null, search not null, categoryid not null, userid null
+            console.log("Filter by category")
+          }
+          else if(!query.userid && !query.categoryid){//limit not null, page not null, search not null, categoryid null, userid null
+            return this.articleModel
+            .find({ title: new RegExp(query.search) })
             .limit(Number.parseInt(query.limit))
             .skip(5 * Number.parseInt(query.page));
+          }
+        }
       }
     }
   }
