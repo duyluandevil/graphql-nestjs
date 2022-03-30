@@ -17,7 +17,7 @@ type JsonResponse {
 }
 
 type Category {
-  id: ID!
+  _id: ID!
   name: String!
   description: String!
 }
@@ -37,17 +37,16 @@ type Query {
   users(page: String!, limit: String!, search: String!): [User!]!
   loginUser(email: String!, password: String!): JsonResponse
   articles(limit: String!, search: String!, categoryId: String!, userId: String!): [Article!]!
-  categories(limit: String!): [Category!]!
-  category(limit: String!, name: String!): [Category!]!
-  deleteCategory(id: String!): Boolean!
+  categories(page: String!, limit: String!, search: String!): [Category!]!
+  deleteCategory(id: String!): JsonResponse
 }
 
 type Mutation {
   createUser(input: CreateUserInput!): JsonResponse
   deleteUser(_id: String!): JsonResponse
   updateUser(_id: String!, input: CreateUserInput!): JsonResponse!
-  createCategory(input: CreateCategoryInput!): [Category!]!
-  updateCategory(input: UpdateCategoryInput!): [Category!]!
+  createCategory(input: CreateCategoryInput!): JsonResponse
+  updateCategory(_id: String!, input: CreateCategoryInput!): [Category!]!
 }
 
 input CreateUserInput {
@@ -58,13 +57,6 @@ input CreateUserInput {
 }
 
 input CreateCategoryInput {
-  id: ID!
-  name: String!
-  description: String!
-}
-
-input UpdateCategoryInput {
-  id: ID!
   name: String!
   description: String!
 }

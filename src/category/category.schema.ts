@@ -9,7 +9,7 @@ export type CategoryDocument = Category & Document;
 @ObjectType()
 export class Category {
   @Field(() => ID) //store for schema.gql with field ID
-  id: number; //create field to get on graphql
+  _id: number; //create field to get on graphql
 
   @Prop()
   @Field(() => String)
@@ -24,9 +24,6 @@ export const CategorySchema = SchemaFactory.createForClass(Category);
 
 @InputType()
 export class CreateCategoryInput{
-  @Field(() => ID) //store for schema.gql with field ID
-  id: number; //create field to get on graphql
-
   @Field(() => String)
   name: string;
 
@@ -37,11 +34,26 @@ export class CreateCategoryInput{
 @InputType()
 export class UpdateCategoryInput{
   @Field(() => ID) 
-  id: number; 
+  _id: number; 
   
   @Field(() => String)
   name: string;
 
   @Field(() => String)
   description: string;
+}
+
+//create json response for category
+@ObjectType()
+export class JsonResponse {
+
+  @Field() //store for schema.gql with field ID
+  success: boolean; //create field to get on graphql
+
+  @Field()
+  message: string;
+
+  @Field(()=> Category, { nullable: true })
+  data: Category;
+
 }
