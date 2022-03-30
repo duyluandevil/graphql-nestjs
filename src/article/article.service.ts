@@ -32,7 +32,7 @@ export class ArticleService {
 
     //get value from detail
     let arrayMtach = articleRCategory.filter(
-      (e) => e.categoryId.toString() === categoryId.toString(),
+      (e) => e.categoryId.toString() == categoryId.toString(),
     );
 
     let arrayArticleId = []; // array has id of article
@@ -40,7 +40,7 @@ export class ArticleService {
 
     let arrayResultEnd = []; // create array for return articles
     arrayArticleId.forEach((e) =>
-      arrayResultEnd.push(article.find((ele) => ele.id.toString() === e)),
+      arrayResultEnd.push(article.find((ele) => ele.id.toString() == e)),
     );
 
     return arrayResultEnd;
@@ -58,9 +58,11 @@ export class ArticleService {
     let arrayResultWithCategory = []; // create array for return articles with category
     arrayArticleId.forEach((e) =>
       arrayResultWithCategory.push(
-        article.find((ele) => ele.id.toString() === e),
+        article.find((ele) => ele.id.toString() == e),
       ),
     );
+
+    // console.log(arrayResultWithCategory);
 
     let arrayResultEnd = []; // create array for return articles with category and userid
     arrayResultWithCategory.forEach((e) => {
@@ -69,10 +71,15 @@ export class ArticleService {
       }
     );
 
-    // console.log(arrayResultEnd);
-
     return arrayResultEnd;
 
     // console.log(arrayMtach);
   }
+
+  
+  // async find(query){
+  //   if(query.search)
+
+  //   //query is object, check each property of query, each prop return result
+  // }
 }

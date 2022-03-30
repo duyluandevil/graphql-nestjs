@@ -10,6 +10,12 @@ type User {
   name: String!
 }
 
+type JsonResponse {
+  success: Boolean!
+  message: String!
+  data: User!
+}
+
 type Article {
   id: ID!
   title: String!
@@ -32,10 +38,9 @@ type Article_R_Category {
 }
 
 type Query {
-  users(limit: String!): [User!]!
-  user(limit: String!, name: String!): [User!]!
-  deleteUser(_id: String!): Boolean!
-  loginUser(email: String!, password: String!): Boolean!
+  user(limit: String!, search: String!): [User!]!
+  deleteUser(_id: String!): JsonResponse!
+  loginUser(email: String!, password: String!): JsonResponse
   articles(limit: String!, categoryId: String!, userId: String!): [Article!]!
   categories(limit: String!): [Category!]!
   category(limit: String!, name: String!): [Category!]!

@@ -1,8 +1,8 @@
+/* eslint-disable no-var */
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import user from 'src/data/user';
-import internal from 'stream';
-import { CreateUserInput, LoginInput, User, UserDocument } from './user.schema';
+import { CreateUserInput, JsonResponse, LoginInput, User, UserDocument } from './user.schema';
 
 //Encrypt with MD5
 import {Md5} from "md5-typescript";
@@ -18,18 +18,29 @@ export class UserService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {
   }
-  async findAll(limit: number) {
-    //func to return all user in data with limit
-    return this.userModel.find().limit(limit);
-  }
 
-  async findOneById(id: string) {
-    return [user.find((e) => e.id.toString() === id)];
-    // console.log(user.find(e => e.id.toString() == id))
-  }
+  async find(query){
+    const {
+      limit,
+      search
+    } = query;
 
-  async findWithCount(limit: number, name: string) {
-    return this.userModel.find({"name": name}).limit(limit);
+    if(!query.limit){ 
+      //if limit is null return with 10 record
+      if(!query.search){
+        return this.userModel.find().limit(10);
+      }else{
+        return this.userModel.find({"name": new RegExp(query.search) }).limit(10);
+      }
+
+    }else{
+      //if limit is not null return with limit transmisstion
+      if(!query.search){
+        return this.userModel.find().limit(query.limit);
+      }else{
+        return this.userModel.find({ "name": new RegExp(query.search) }).limit(query.limit);
+      }
+    }
   }
 
   async createUser(nUser: CreateUserInput) {
@@ -51,9 +62,18 @@ export class UserService {
   }
 
   async deleteUser(id: string) {
-    return (await (await this.userModel.deleteOne({ _id: id })).deletedCount) === 1
-      ? true
-      : false;
+    if((await this.userModel.deleteOne({ _id: id })).deletedCount === 1){
+      const jsonRes = new JsonResponse();
+      jsonRes.success = true;
+      jsonRes.message = "Delete user successfully";
+      return jsonRes;
+    }
+    else{
+      const jsonRes = new JsonResponse();
+      jsonRes.success = false;
+      jsonRes.message = "Delete user failed";
+      return jsonRes;
+    }
   }
 
   async updateUser(id: string, uUser: CreateUserInput) {
@@ -104,21 +124,31 @@ export class UserService {
     }
 
   //Login
-  async login(email: string, password: string) {
+  async login(query) {
+    const {
+      email,
+      password
+    } = query
     // Find our user
     const user = await this.userModel
-      .findOne({email: email});
+      .findOne({email: query.email, password: Md5.init(query.password)});
 
     // Check that user exists
     // Validate user
-    if(!user)
-      return false
-    else if(Md5.init(password) !== user.password)
-      return false
-    // return the user
-    return true;
+    if(user){
+      const jsonRes = new JsonResponse();
+      jsonRes.success = true;
+      jsonRes.message = "User logged in successfully";
+      jsonRes.data = user;
+      return jsonRes;
 
-    // console.log(user)
+    }else{
+      const jsonRes = new JsonResponse();
+      jsonRes.success = false;
+      jsonRes.message = "User logged in failed";
+      jsonRes.data = user;
+      return jsonRes;
+    }
   }
 
 }

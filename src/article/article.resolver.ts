@@ -64,7 +64,7 @@ export class ArticleResolver {
 
   @ResolveField(() => [User])
   async user(@Parent() article: Article) {
-    return await this.userService.findOneById(article.userid.toString());
+    // return await this.userService.findOneById(article.userid.toString());
     // console.log(this.userService.findOneById(article.userid.toString()))
     // console.log(typeof article.userid)
     // // console.log(user.articleId)

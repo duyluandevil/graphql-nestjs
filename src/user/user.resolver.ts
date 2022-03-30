@@ -1,34 +1,25 @@
 /* eslint-disable prettier/prettier */
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { User, CreateUserInput, LoginInput } from './user.schema';
+import { find } from 'rxjs';
+import { User, CreateUserInput, LoginInput, JsonResponse } from './user.schema';
 import { UserService } from './user.service';
 
 @Resolver()
 export class UserResolver {
   constructor(private userService: UserService) {} //constructor
 
-  //CRUD
+  //Final query user
   @Query(() => [User])
-  async users(@Args('limit') limit: string) {
-    return this.userService.findAll(Number.parseInt(limit));
-    // return this.userService.findWithCount(count);
-  }
-
-  @Query(() => [User])
-  async user(@Args('limit') limit: string, @Args('name') name: string) {
-    if (name) {
-      return this.userService.findWithCount(Number.parseInt(limit), name);
-    }
-    return this.userService.findAll(Number.parseInt(limit));
-    // return this.userService.findWithCount(count);
-  }
+  async user(@Args('limit') limit: string, @Args('search') search: string){
+    return this.userService.find({ limit: Number.parseInt(limit), search: search });
+  } 
 
   @Mutation(() => [User]) // Create User
   async createUser(@Args('input') user: CreateUserInput) {
     return this.userService.createUser(user);
   }
 
-  @Query(() => Boolean) //Delete User
+  @Query(() => JsonResponse) //Delete User
   async deleteUser(@Args('_id') id: string) {
     return this.userService.deleteUser(id);
   }
@@ -42,8 +33,8 @@ export class UserResolver {
   }
 
   //Login
-  @Query(() => Boolean)
+  @Query(() => JsonResponse, {nullable: true})
   async loginUser(@Args('email') email: string, @Args('password') password: string) {
-    return this.userService.login(email, password);
+    return this.userService.login({email: email, password :password});
   }
 }
