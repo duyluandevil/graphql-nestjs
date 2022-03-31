@@ -69,17 +69,3 @@ export class SearchInput{
   email: string;
 }
 
-//login json response
-@ObjectType()
-export class JsonResponse {
-
-  @Field() //store for schema.gql with field ID
-  success: boolean; //create field to get on graphql
-
-  @Field()
-  message: string;
-
-  @Field(()=> User, { nullable: true })
-  data: User;
-
-}

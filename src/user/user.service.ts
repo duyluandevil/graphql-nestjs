@@ -4,7 +4,6 @@ import { Injectable } from '@nestjs/common';
 import user from 'src/data/user';
 import {
   CreateUserInput,
-  JsonResponse,
   LoginInput,
   User,
   UserDocument,
@@ -16,6 +15,7 @@ import { Md5 } from 'md5-typescript';
 //mongoose
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { JsonResponse } from 'src/api-response/api.schema';
 
 @Injectable()
 export class UserService {
