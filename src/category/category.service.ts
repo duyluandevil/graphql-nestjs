@@ -25,6 +25,15 @@ export class CategoryService {
       throw new Error('Param limit is not number');
     }
 
+    //create skip for use pagnigation
+    const skip = (query.page-1) * query.limit;
+
+    const arrayResult = await this.categoryModel.find({
+      name: new RegExp(query.search)
+    }).limit(query.limit).skip(skip);
+
+    return arrayResult;
+
     //is limit exists?
     if (!query.limit) {
       //limit is null
