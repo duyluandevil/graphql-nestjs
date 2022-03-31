@@ -9,6 +9,7 @@ import { UserModule } from './user/user.module';
 import { ArticleModule } from './article/article.module';
 import { CategoryModule } from './category/category.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ApiResponseModule } from './api-response/api-response.module';
 import 'dotenv/config'; //import dotenv
 
 
@@ -22,6 +23,7 @@ import 'dotenv/config'; //import dotenv
     }),
     ArticleModule,
     CategoryModule,
+    ApiResponseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
