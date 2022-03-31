@@ -33,59 +33,6 @@ export class CategoryService {
     }).limit(query.limit).skip(skip);
 
     return arrayResult;
-
-    //is limit exists?
-    if (!query.limit) {
-      //limit is null
-
-      //is search exists?
-      if (!query.search) {
-        //search is null
-        if (!query.page) return this.categoryModel.find().limit(10);
-        // page is null return all user with default limit
-        else
-          return this.categoryModel
-            .find()
-            .limit(10)
-            .skip(5 * Number.parseInt(query.page)); // page is not null return all user with default limit
-      } else {
-        //search is not null
-        if (!query.page)
-          return this.categoryModel
-            .find({ name: new RegExp(query.search) })
-            .limit(10);
-        else
-          return this.categoryModel
-            .find({ name: new RegExp(query.search) })
-            .limit(10)
-            .skip(5 * Number.parseInt(query.page)); //câu hỏi
-      }
-    } else {
-      //limit is not null
-
-      if (!query.search) {
-        //search is null
-        if (!query.page)
-          return this.categoryModel.find().limit(Number.parseInt(query.limit));
-        // page is null return all user with default limit
-        else
-          return this.categoryModel
-            .find()
-            .limit(Number.parseInt(query.limit))
-            .skip(5 * Number.parseInt(query.page)); // page is not null return all user with default limit
-      } else {
-        //search is not null
-        if (!query.page)
-          return this.categoryModel
-            .find({ name: new RegExp(query.search) })
-            .limit(Number.parseInt(query.limit));
-        else
-          return this.categoryModel
-            .find({ name: new RegExp(query.search) })
-            .limit(Number.parseInt(query.limit))
-            .skip(5 * Number.parseInt(query.page));
-      }
-    }
   }
 
   //func validate data input for category
