@@ -116,7 +116,7 @@ export class ArticleService {
 
     if (!articleMatchTitle) {
       //user not find
-      if (this.checkDataCreate(input)) {
+      if (this.checkDataCreate(input) && (await this.checkUseridAndCategoryidAreExists(input.userid, input.categoryid[0])) === true) {
         //validate
         //if all input's true, create new
         const articleAddToMongoDb = new this.articleModel(); //create new object for store
@@ -141,7 +141,7 @@ export class ArticleService {
         //create json to respone
         const jsonRes = new JsonResponseArticle();
         jsonRes.success = false;
-        jsonRes.message = 'Create article user is failed';
+        jsonRes.message = 'Create article user is failed, maybe wrong input data, maybe document not exists user or category';
         return jsonRes;
       }
     } else {
@@ -151,6 +151,19 @@ export class ArticleService {
       jsonRes.message = 'Title is exist in database';
       return jsonRes;
     }
+  }
+
+  //check relationship, if userid and categoryid are exists, i will creates article
+  async checkUseridAndCategoryidAreExists(userid: string, categoryid: string){
+    let flag = true;
+    if((await this.userModel.find({_id: userid})).length === 0){ //user is not exist
+      flag = false;
+    }
+    if((await this.categoryModel.find({_id: categoryid})).length === 0){ //category is not exists
+      flag = false;
+    }
+
+    return flag;
   }
 
   //delete article
