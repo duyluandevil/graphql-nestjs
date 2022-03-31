@@ -59,6 +59,16 @@ export class LoginInput {
   password: string;
 }
 
+//create input with mutilple Params
+@InputType()
+export class SearchInput{
+  @Field()
+  name: string;
+
+  @Field()
+  email: string;
+}
+
 //login json response
 @ObjectType()
 export class JsonResponse {

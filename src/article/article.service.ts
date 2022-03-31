@@ -25,6 +25,7 @@ export class ArticleService {
 
   async find(query) {
     const { page, limit, search, userid, categoryid } = query;
+    
 
     //validate data
     if (query.page && isNaN(query.page)) {
@@ -33,6 +34,19 @@ export class ArticleService {
     if (query.limit && isNaN(query.limit)) {
       throw new Error('Param limit is not number');
     }
+
+    //think page
+
+    let skip = (query.page-1) * query.limit;
+    let queryparam: any = {  }
+    if(query.search){
+      queryparam.name = query.search;
+    }
+
+    if(query.userid && query.userid > 0)
+      queryparam.userid = query.userid;
+
+    const array = await this.articleModel.find( queryparam ).limit(query.limit).skip(skip);
 
     //Check all params transmission
     if (!query.limit) {
