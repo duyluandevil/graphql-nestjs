@@ -37,58 +37,18 @@ export class UserService {
       throw new Error('Param limit is not number');
     }
 
-    //is limit exists?
-    if (!query.limit) {
-      //limit is null
-
-      //is search exists?
-      if (!query.search) {
-        //search is null
-        if (!query.page) return this.userModel.find().limit(10);
-        // page is null return all user with default limit
-        else
-          return this.userModel
-            .find()
-            .limit(10)
-            .skip(5 * Number.parseInt(query.page)); // page is not null return all user with default limit
-      } else {
-        //search is not null
-        if (!query.page)
-          return this.userModel
-            .find({ name: new RegExp(query.search) })
-            .limit(10);
-        else
-          return this.userModel
-            .find({ name: new RegExp(query.search) })
-            .limit(10)
-            .skip(5 * Number.parseInt(query.page)); //câu hỏi
-      }
-    } else {
-      //limit is not null
-
-      if (!query.search) {
-        //search is null
-        if (!query.page)
-          return this.userModel.find().limit(Number.parseInt(query.limit));
-        // page is null return all user with default limit
-        else
-          return this.userModel
-            .find()
-            .limit(Number.parseInt(query.limit))
-            .skip(5 * Number.parseInt(query.page)); // page is not null return all user with default limit
-      } else {
-        //search is not null
-        if (!query.page)
-          return this.userModel
-            .find({ name: new RegExp(query.search) })
-            .limit(Number.parseInt(query.limit));
-        else
-          return this.userModel
-            .find({ name: new RegExp(query.search) })
-            .limit(Number.parseInt(query.limit))
-            .skip(5 * Number.parseInt(query.page));
-      }
+    const skip = (query.page-1) * query.limit;
+    const queryparam: any = {  }
+    if(query.search){
+      queryparam.name = query.search;
     }
+
+    if(query.userid && query.userid > 0)
+      queryparam.userid = query.userid;
+
+    const array =  await this.userModel.find({ "name": new RegExp(queryparam.name), "userid": queryparam.userid }).limit( query.limit ).skip( skip )  
+
+    return array;
   }
 
   //create new user
