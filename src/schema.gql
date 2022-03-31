@@ -53,7 +53,8 @@ type Mutation {
   deleteUser(_id: String!): JsonResponse
   updateUser(_id: String!, input: CreateUserInput!): JsonResponse!
   mutationArticles(id: String, input: CreateArticleInput): JsonResponseArticle!
-  createCategory(input: CreateCategoryInput!): JsonResponse!
+  mutationCategory(id: String, input: CreateCategoryInput): JsonResponse
+  createCategory(input: CreateCategoryInput!): JsonResponse
   deleteCategory(id: String!): JsonResponse
   updateCategory(_id: String!, input: CreateCategoryInput!): [Category!]!
 }

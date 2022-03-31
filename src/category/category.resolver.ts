@@ -26,7 +26,17 @@ export class CategoryResolver {
     });
   }
 
-  @Mutation(() => JsonResponse)
+  @Mutation(() => JsonResponse, {nullable: true})
+  async mutationCategory(@Args('id', {nullable: true}) id: string, @Args('input', {nullable: true}) input: CreateCategoryInput){
+    //Create
+    if(!id && input) return this.categoryService.createCategory(input);
+    
+    //Delete
+    if(id && !input) return this.categoryService.deleteCategory(id);
+
+    //Update
+    if(id && input) return this.categoryService.updateCategory(id, input);
+  }
 
   @Mutation(() => JsonResponse, { nullable: true }) //Create category
   async createCategory(@Args('input') input: CreateCategoryInput) {

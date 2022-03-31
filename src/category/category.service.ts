@@ -7,11 +7,14 @@ import { Category, CategoryDocument, CreateCategoryInput, UpdateCategoryInput } 
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { JsonResponse } from 'src/api-response/api.schema';
+import { Article, ArticleDocument } from 'src/article/article.schema';
 
 @Injectable()
 export class CategoryService {
   category: Partial<Category>[];
-  constructor(@InjectModel(Category.name) private categoryModel: Model<CategoryDocument>) {}
+  constructor(@InjectModel(Category.name) private categoryModel: Model<CategoryDocument>,
+  @InjectModel(Article.name) private articleModel: Model<ArticleDocument>
+  ) {}
 
   //find for read
   async find(query) {
@@ -89,9 +92,13 @@ export class CategoryService {
     //validate
     if (await this.categoryModel.findOne({ _id: id })) {
       if ((await this.categoryModel.deleteOne({ _id: id })).deletedCount === 1) {
+
+        //delete article which category deleted
+        this.deleteArticle(id);
+
         const jsonRes = new JsonResponse();
         jsonRes.success = true;
-        jsonRes.message = 'Delete category successfully';
+        jsonRes.message = 'Delete category successfully and article have categoryid';
         return jsonRes;
       }
     } else {
@@ -100,6 +107,16 @@ export class CategoryService {
       jsonRes.message = 'Delete category failed';
       return jsonRes;
     }
+  }
+
+  //delete article
+  async deleteArticle(id: string){
+    const arrayArticle = await this.articleModel.find();
+
+    arrayArticle.forEach(async e =>{
+      if(e.categoryid.includes(id))
+        await this.articleModel.deleteOne({ _id: e._id});
+    })
   }
 
   async updateCategory(id: string, uCategory: CreateCategoryInput) {
