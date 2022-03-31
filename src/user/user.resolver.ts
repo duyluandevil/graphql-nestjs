@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { find } from 'rxjs';
-import { User, CreateUserInput, LoginInput, JsonResponse, SearchInput } from './user.schema';
+import { User, CreateUserInput, LoginInput,  SearchInput, JsonResponse } from './user.schema';
 import { UserService } from './user.service';
+
 
 @Resolver()
 export class UserResolver {

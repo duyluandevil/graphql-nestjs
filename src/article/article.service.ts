@@ -37,7 +37,6 @@ export class ArticleService {
     }
 
     //think page
-
     let skip = (query.page - 1) * query.limit;
     let queryparam: any = {};
     if (query.search) {
@@ -45,7 +44,6 @@ export class ArticleService {
     }
 
     if (query.userid) queryparam.userid = query.userid; //cannot compare 2 objectid, contain value but the objects not same, compare with ref
-
     if (query.categoryid) queryparam.categoryid = query.categoryid;
 
     
@@ -55,17 +53,40 @@ export class ArticleService {
       .limit(query.limit)
       .skip(skip); //delcare array stores article
 
-      // console.log(new mongoose.Types.ObjectId(queryparam.userid)) 
-    const resultArray = []; // delcare array stores end result
-    array.forEach((e) => {
-      if ( e.userid.toString() === queryparam.userid )
-        //find article which match userid
-        resultArray.push(e);
-    });
+    let resultArray = []; // delcare array stores end result
 
-    return resultArray
-    // console.log( resultArray )
-    // console.log( array )
+    if(queryparam.userid && !queryparam.categoryid){ //only userid exist
+      array.forEach(e => {
+        if(e.userid.toString() === queryparam.userid)
+          resultArray.push(e)
+      })
+       resultArray;
+    }
+
+    if(!queryparam.userid && queryparam.categoryid){ //only categoryid exist
+      array.forEach(e => {
+        if(e.categoryid.includes(queryparam.categoryid) && e.userid.toString() !== "" )
+          resultArray.push(e)
+      })
+      return resultArray
+    }
+
+    if(!queryparam.userid && !queryparam.categoryid){ //not transmission 2 param
+      array.forEach(e => {
+        if(e.userid.toString() !== queryparam.userid)
+          resultArray.push(e)
+      })
+      return resultArray;
+    }
+
+    if(queryparam.userid && queryparam.categoryid){ //2 both params exist 
+      array.forEach(e => {
+        if(e.userid.toString() === queryparam.userid && e.categoryid.includes(queryparam.categoryid))
+          resultArray.push(e)
+      })
+      return(resultArray);
+    }
+
   }
 
   //func for ResolveField User

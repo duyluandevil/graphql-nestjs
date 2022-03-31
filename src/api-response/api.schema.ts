@@ -11,7 +11,7 @@ export class JsonResponse {
   @Field()
   message: string;
 
-  @Field(() => [])
+  @Field(() =>Array, {nullable:true})
   data: any;
 
 }

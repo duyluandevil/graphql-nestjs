@@ -8,7 +8,7 @@ import {
 } from './category.schema';
 import { CategoryService } from './category.service';
 
-@Resolver()
+@Resolver(() => Category)
 export class CategoryResolver {
   constructor(private categoryService: CategoryService) {}
 
@@ -26,12 +26,14 @@ export class CategoryResolver {
     });
   }
 
+  @Mutation(() => JsonResponse)
+
   @Mutation(() => JsonResponse, { nullable: true }) //Create category
   async createCategory(@Args('input') input: CreateCategoryInput) {
     return this.categoryService.createCategory(input);
   }
 
-  @Query(() => JsonResponse, { nullable: true }) //Delete User
+  @Mutation(() => JsonResponse, { nullable: true }) //Delete User
   async deleteCategory(@Args('id') id: string) {
     return this.categoryService.deleteCategory(id);
   }

@@ -45,7 +45,6 @@ type Query {
   loginUser(email: String!, password: String!): JsonResponse
   articles(page: String!, limit: String!, search: String!, categoryid: String, userid: String): [Article!]!
   categories(page: String!, limit: String!, search: String!): [Category!]!
-  deleteCategory(id: String!): JsonResponse
 }
 
 type Mutation {
@@ -54,7 +53,8 @@ type Mutation {
   deleteUser(_id: String!): JsonResponse
   updateUser(_id: String!, input: CreateUserInput!): JsonResponse!
   mutationArticles(id: String, input: CreateArticleInput): JsonResponseArticle!
-  createCategory(input: CreateCategoryInput!): JsonResponse
+  createCategory(input: CreateCategoryInput!): JsonResponse!
+  deleteCategory(id: String!): JsonResponse
   updateCategory(_id: String!, input: CreateCategoryInput!): [Category!]!
 }
 

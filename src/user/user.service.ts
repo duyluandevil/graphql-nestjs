@@ -16,11 +16,15 @@ import { Md5 } from 'md5-typescript';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { JsonResponse } from 'src/api-response/api.schema';
+import { Article, ArticleDocument } from 'src/article/article.schema';
 
 @Injectable()
 export class UserService {
   user: Partial<User>[];
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(Article.name) private articleModel: Model<ArticleDocument>
+  ) {}
 
   //1 page chứa 5 records
 
@@ -97,13 +101,17 @@ export class UserService {
   }
 
   //delete user in database
-  async deleteUser(id: string) {
+  async deleteUser(id: string) { //if delete user is true, delete article which have user is owners
     //validate
     if (await this.userModel.findOne({ _id: id })) {
       if ((await this.userModel.deleteOne({ _id: id })).deletedCount === 1) {
+
+        //detele article 
+        this.deleteArticle(id);
+
         const jsonRes = new JsonResponse();
         jsonRes.success = true;
-        jsonRes.message = 'Delete user successfully';
+        jsonRes.message = 'Delete user successfully, at the same time delete article which user is owners';
         return jsonRes;
       }
     } else {
@@ -112,6 +120,17 @@ export class UserService {
       jsonRes.message = 'Delete user failed';
       return jsonRes;
     }
+  }
+
+  //func delete article
+  async deleteArticle(userid: string){
+    const arrayArticle = await this.articleModel.find();
+
+    arrayArticle.forEach(async e => {
+      if(e.userid.toString() === userid)
+        console.log((await this.articleModel.deleteOne({ _id: e._id.toString() })).deletedCount === 1)
+        // console.log(e._id)
+    })
   }
 
   //update information in database

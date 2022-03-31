@@ -6,7 +6,7 @@ import { Category, CategoryDocument, CreateCategoryInput, UpdateCategoryInput } 
 //mongoose
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { JsonResponse } from 'src/category/category.schema';
+import { JsonResponse } from 'src/api-response/api.schema';
 
 @Injectable()
 export class CategoryService {
@@ -124,16 +124,12 @@ export class CategoryService {
         jsonRes.message =
           'Update information of category is failed, wrong input data';
         jsonRes.data = await this.categoryModel.findOne({ _id: id });
-        return jsonRes;
-      }
-    } else {
-      const jsonRes = new JsonResponse();
-      jsonRes.success = false;
-      jsonRes.message = 'Category is not exists in databse';
+        jsonRes.message = 'Category is not exists in databse';
       return jsonRes;
     }
     // console.log(await this.userModel.findOne({_id: id}))
   }
+}
 }
 
 
